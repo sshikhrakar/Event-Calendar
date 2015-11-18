@@ -1,0 +1,139 @@
+a{
+  text-decoration: none;
+  color:#fff;
+}
+.calendar-day{
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: 100;
+  /*line-height: 1em;*/
+  background-color: #fff;
+  text-align: right;
+  vertical-align: bottom;
+  /*display: inline-block;*/
+  /*margin-top: -0.7em;*/
+  /*padding: 0.65em 0 0.65em 0.7em;*/
+}
+.today{
+  background: rgba(52, 152, 219,1.0);
+  color: #fff;
+  font-weight: bold;
+}
+table{
+  /*width: 581px;*/
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+th,td{
+  width: 70px;
+  height: 70px;
+  border: 1px solid #d4d4d4;
+}
+th{
+  font-family: Roboto Condensed, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  color: #000;
+  font-size: 20px;
+  background: #f9f9f9;
+}
+td:hover{
+  background: rgba(155, 89, 182,1.0);
+  cursor: pointer;
+  -webkit-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+.full-date-header{
+  width: 498px;
+  margin: 0 auto;
+  padding: 20px 0 10px 0;
+}
+.full-date{
+  width: 300px; 
+  float: left;
+  text-align: center;
+  line-height: 70px;
+  background: #f9f9f9;
+}
+.today-btn{
+  float:left;
+  padding: 19px 0;
+  background: #f9f9f9;
+}
+.today-btn a{
+  display: inline-block;
+  width:58px;
+  text-align: center;
+  padding: 4px;
+  background: #d7d7d7;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 100;
+  border: 1px solid #000;
+}
+.prev-month, .next-month{
+  width: 70px;
+  height: 70px;
+  background: #f9f9f9;
+  text-align: center;
+  line-height: 70px;
+  /*border: 1px solid #d4d4d4;*/
+}
+.prev-month{
+  float: left; 
+}
+.next-month{
+  float: right;
+}
+.fa-chevron-left, .fa-chevron-right{
+  color: #d7d7d7;
+  cursor:pointer;
+}
+.make-relative{
+  position: relative;
+}
+.event{
+  font-size:12px;
+  color:#fff;
+  background: rgba(26, 188, 156,1.0);
+  display: inline-block;
+  position: absolute;
+  top:0;
+  left:0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%; 
+}
+/*FONTS*/
+.fc {
+  font-family: Roboto Condensed, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  color: #000;
+  font-size: 24px;
+  /*background-image: url(http://tobiasahlin.com/images/typesource/leaves.jpg);*/
+  /*background-color: #2b5a33;*/
+  /* background-size: cover;*/
+  /*padding: 4em 6em 7.5em;*/
+}
+
+.fc-r1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+.fc-r2 {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 100;
+  line-height: 1em;
+  letter-spacing: 0.64em;
+  background-color: #fff;
+  display: inline-block;
+  margin-top: -0.7em;
+  padding: 0.65em 0 0.65em 0.7em;
+}
+/*FONTS END*/
