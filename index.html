@@ -11,14 +11,21 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
-	<div class="full-date-header">
-		<div class="prev-month fa fa-chevron-left fa-2x"></div>
-		<div class="full-date fc"></div>
-		<div class="today-btn"><a href="#">Today</a></div>	
-		<div class="next-month fa fa-chevron-right fa-2x"></div>
+	<div class="calendar">
+		<div class="full-date-header">
+			<div class="prev-month fa fa-chevron-left fa-2x"></div>
+			<div class="full-date fc"></div>
+			<div class="today-btn"><a href="#">Today</a></div>	
+			<div class="next-month fa fa-chevron-right fa-2x"></div>
+		</div>
+		<table class="calendar-table"></table>	
 	</div>
-	<table class="calendar-table"></table>
+	
 	<script src="js/cal.js"></script>
+	<script>
+		$('.calendar').Calendar();
+		$('.calendar').Calendar.init();
+	</script>
 </script>
 </body>
 </html>

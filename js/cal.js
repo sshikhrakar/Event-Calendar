@@ -1,4 +1,4 @@
-;(function(){
+;(function($){
 	'use strict';
 	// these are labels for the days of the week
 	var cal_days_labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -70,7 +70,6 @@
 						$(tdArray[i]).removeClass('make-relative');
 					}
 				}
-				
 			}
 	};
 
@@ -238,8 +237,8 @@
 	}; 
 
 
-	function Calendar(){
-		this.init = function(month,year){
+	$.fn.Calendar = function(){
+		$.fn.Calendar.init = function(month,year){
 			this.year = year;
 			this.month = month;
 			var that = this;
@@ -269,8 +268,4 @@
 		};
 	};
 
-	$(document).ready(function(){
-		var calendar = new Calendar;
-		calendar.init();
-	});
-})();
+})(jQuery);
