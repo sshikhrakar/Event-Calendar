@@ -23,6 +23,73 @@
 		return calCurrentDate;
 	}
 
+	var changeSelectBoxYear = function(year){
+		var year = year;
+		 // $( ".year-select option:selected" ).each(function() {
+		 // 	console.log('current: ' + $('.year-select option:selected').val() + 'provided: ' + year);
+		 //      if($('.year-select option:selected').val() < year){
+		 //      	$(this).removeAttr('selected');
+		 //      	$(this).next().attr('selected','selected');
+		 //      }
+		 //      if($('.year-select option:selected').val() > year){
+		 //      	$(this).removeAttr('selected');
+		 //      	$(this).prev().attr('selected','selected');
+		 //      }
+	  //   });
+	};
+
+	var selectYear = function(month,year){
+		var year = year,
+		    month = month,
+			earliestYear = 2009,
+			$optionsYear = [],
+			$optionsMonth = [],
+			$yearSelect = $('<select></select>').addClass('year-select'),
+			$monthSelect = $('<select></select>').addClass('month-select');
+		for(var i=0;i<9;i++){
+			$optionsYear[i] = $('<option></option>').attr('class','year-option').append(earliestYear);
+			if(year === earliestYear){
+				$optionsYear[i].attr('selected','selected');
+			}
+			$yearSelect.append($optionsYear[i]);
+			earliestYear++;	
+		}
+		$('.selector').append($yearSelect);
+		for(var i=0; i < cal_months_labels.length ;i++){
+			$optionsMonth[i] = $('<option></option>').attr('class','month-option').append(cal_months_labels[i]);
+			if(month === i){
+				$optionsMonth[i].attr('selected','selected');
+			}
+			$monthSelect.append($optionsMonth[i]);
+		}
+		$('.selector').append($monthSelect);
+
+		$(".year-select").change(function() {
+		    var str = "";
+		    $( ".year-select option:selected" ).each(function() {
+		      year = parseInt($(this).val());
+		      createCalendarDatas(month,year);
+		    });
+		    buttonMapping(month,year);
+		})
+
+		$(".month-select").change(function() {
+		    var str = "";
+		    $( ".month-select option:selected" ).each(function() {
+		      var monthName = $(this).val();
+		      console.log($(this).val());
+		      for(var i=0; i < cal_months_labels.length; i++){
+		      	if(cal_months_labels[i] === monthName){
+		      		month = i;
+		      	}
+		      }
+		      createCalendarDatas(month,year);
+		    });
+		    buttonMapping(month,year);
+		})
+	 	.trigger( "change" );
+	}
+
 	/**
 	  * @param [Number] month for the calendar
 	  * @param [Number] year for the calendar
@@ -73,83 +140,63 @@
 			}
 	};
 
+	var createCalendarDatas = function(month,year){
+		var month = month,
+			year = year;
+		$('.calendar-day').remove();
+		$('.day-row').remove();
+		fullDateHeader(month,year);
+		var calendarDate = new ShowNumberDate(month,year),
+			monthLength = calendarDate.monthLength(),
+			startDay = calendarDate.getStartDay(),	
+			prevMonthLen = calendarDate.prevMonthLen();
+		calendarDate.printDate(monthLength,startDay,prevMonthLen);
+	};
+
 	var buttonMapping = function(month,year){
 		var month = month;
 		var year = year;
 		$('.today-btn').click(function(){
-				$('.calendar-day').remove();
-				var month = calDate.getMonth(),
-					year = calDate.getFullYear();
-				fullDateHeader(month,year);
-				var showTodayCal = new ShowNumberDate(month, year);
-				var monthLength = showTodayCal.monthLength();
-				var startDay = showTodayCal.getStartDay();	
-				var prevMonthLen = showTodayCal.prevMonthLen();
-				showTodayCal.printDate(monthLength,startDay,prevMonthLen);
-				month = month;
-				year = year;
-			});
+			var todayMonth = calDate.getMonth(),
+				todayYear = calDate.getFullYear();
+				createCalendarDatas(todayMonth,todayYear);
+			month = todayMonth;
+			year = todayYear;
+		});
 
-			$('.prev-month').click(function(){
-				if(month > 0){
-					$('.calendar-day').remove();
-					var prevMonth = month - 1;
-					fullDateHeader(prevMonth, year);
-					var showDatePrev = new ShowNumberDate(prevMonth, year);
-					var monthLength = showDatePrev.monthLength();
-					var startDay = showDatePrev.getStartDay();	
-					var prevMonthLen = showDatePrev.prevMonthLen();
-					showDatePrev.printDate(monthLength,startDay,prevMonthLen);
-					month = prevMonth;
-				}
-				else{
-					$('.calendar-day').remove();
-					var prevMonth = 11;
-					var prevYear = year - 1;
-					fullDateHeader(prevMonth,prevYear);
-					var showPrevYear = new ShowNumberDate(prevMonth, prevYear);
-					var monthLength = showPrevYear.monthLength();
-					var startDay = showPrevYear.getStartDay();	
-					var prevMonthLen = showPrevYear.prevMonthLen();
-					showPrevYear.printDate(monthLength,startDay,prevMonthLen);
-					month = prevMonth;
-					year = prevYear;
-				}
-			});
+		$('.prev-month').click(function(){
+			if(month > 0){
+				var prevMonth = month - 1;
+				createCalendarDatas(prevMonth,year);
+				month = prevMonth;
+			}
+			else{
+				var prevMonth = 11,
+					prevYear = year - 1;
+					createCalendarDatas(prevMonth,prevYear);
+				month = prevMonth;
+				year = prevYear;
+				changeSelectBoxYear(year);
+			}
+		});
 
-			$('.next-month').click(function(){
-				if(month < 11){
-					$('.calendar-day').remove();
-					console.log('this.month: ' + month);
-					var nextMonth = month + 1;
-					console.log('nextMonth: ' + nextMonth);
-					fullDateHeader(nextMonth,year);
-					var showDateNext = new ShowNumberDate(nextMonth, year);
-					var monthLength = showDateNext.monthLength();
-					var startDay = showDateNext.getStartDay();	
-					var prevMonthLen = showDateNext.prevMonthLen();
-					showDateNext.printDate(monthLength,startDay,prevMonthLen);
-					month = nextMonth;
-				}
-				else{
-					$('.calendar-day').remove();
-					var nextMonth = 0;
-					var nextYear = year + 1;
-					fullDateHeader(nextMonth,nextYear);
-					var showNextYear = new ShowNumberDate(nextMonth, nextYear);
-					var monthLength = showNextYear.monthLength();
-					var startDay = showNextYear.getStartDay();	
-					var prevMonthLen = showNextYear.prevMonthLen();
-					showNextYear.printDate(monthLength,startDay,prevMonthLen);
-					month = nextMonth;
-					year = nextYear;
-				}
-			});
-
+		$('.next-month').click(function(){
+			if(month < 11){
+				var nextMonth = month + 1;
+				createCalendarDatas(nextMonth,year);
+				month = nextMonth;
+			}
+			else{
+				var nextMonth = 0,
+					nextYear = year + 1;
+					console.log('Next Year: ' + nextYear);
+				createCalendarDatas(nextMonth,nextYear);
+				month = nextMonth;
+				year = nextYear;
+				changeSelectBoxYear(year);
+			}
+		});
 	};
-
-
-
 
 	/**
 	  * @param [Number] month for the calendar
@@ -210,11 +257,14 @@
 				    var $calendarDay = $("<td></td>").attr('class','calendar-day');
 				    if (day <= monthLength && (i > 0 || j >= startingDay)) {
 				      $calendarDay.append(day);
-
-				      if(day === todayDate && month === calDate.getMonth() && isLabelled === 1){
-				      	$calendarDay.addClass('today');
-				      	isLabelled++;
+				      console.log('year sdfs '+year)
+				      if(year === calDate.getFullYear()){
+				    	if(day === todayDate && month === calDate.getMonth() && isLabelled === 1){
+				      		$calendarDay.addClass('today');
+				      		isLabelled++;
+				     	}
 				      }
+				     
 				      if(flag === true){
 			    		$calendarDay.css('color','red');
 				      }
@@ -254,16 +304,10 @@
 			};
 
 			fullDateHeader(this.month,this.year);
+			selectYear(this.month,this.year);
 			showDays();
-			var showDate = new ShowNumberDate(this.month, this.year);
-			var monthLength = showDate.monthLength();
-			var startDay = showDate.getStartDay();	
-			var prevMonthLen = showDate.prevMonthLen();
-			showDate.printDate(monthLength,startDay, prevMonthLen);
-			console.log('this.month.init: ' + this.month);
-
+			createCalendarDatas(this.month,this.year);
 			buttonMapping(this.month,this.year);
-			
 			clickDate();  		
 		};
 	};

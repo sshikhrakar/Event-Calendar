@@ -2,6 +2,9 @@ a{
   text-decoration: none;
   color:#fff;
 }
+select {
+  cursor:pointer;
+}
 .calendar-day{
   font-family: Roboto, sans-serif;
   font-size: 20px;
@@ -20,12 +23,12 @@ a{
   font-weight: bold;
 }
 table{
-  /*width: 581px;*/
+  width: 498px;
   margin: 0 auto;
   border-collapse: collapse;
 }
 th,td{
-  width: 70px;
+  width: 71px;
   height: 70px;
   border: 1px solid #d4d4d4;
 }
@@ -47,30 +50,44 @@ td:hover{
 .full-date-header{
   width: 498px;
   margin: 0 auto;
-  padding: 20px 0 10px 0;
+  -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+  -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+  box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+}
+.options-bar{
+  width: 498px;
+  margin: 0 auto;
+  background: #e6e6e6;
+  padding: 5px;
 }
 .full-date{
-  width: 300px; 
+  width:358px;
   float: left;
   text-align: center;
   line-height: 70px;
   background: #f9f9f9;
 }
+.selector{
+  float: left;
+  margin-right:10px;
+}
 .today-btn{
-  float:left;
-  padding: 19px 0;
-  background: #f9f9f9;
+  float:right;
 }
 .today-btn a{
   display: inline-block;
-  width:58px;
+  width: 58px;
   text-align: center;
-  padding: 4px;
-  background: #d7d7d7;
-  font-family: Roboto, sans-serif;
-  font-size: 18px;
-  font-weight: 100;
-  border: 1px solid #000;
+  padding: 5px;
+  color: #000;
+  background: #f8f8f8;
+  border: 1px solid #f8f8f8;
+}
+.today-btn a:hover{
+  background: #99c1ff;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .prev-month, .next-month{
   width: 70px;
@@ -89,6 +106,16 @@ td:hover{
 .fa-chevron-left, .fa-chevron-right{
   color: #d7d7d7;
   cursor:pointer;
+}
+.year-select{
+  border: 1px solid #f8f8f8;
+  padding: 6px;
+  margin-right:5px;
+}
+.month-select{
+  border: 1px solid #f8f8f8;
+  padding: 6px;
+  margin-right:5px;
 }
 .make-relative{
   position: relative;
