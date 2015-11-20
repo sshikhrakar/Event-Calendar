@@ -25,17 +25,21 @@
 
 	var changeSelectBoxYear = function(year){
 		var year = year;
-		 // $( ".year-select option:selected" ).each(function() {
-		 // 	console.log('current: ' + $('.year-select option:selected').val() + 'provided: ' + year);
-		 //      if($('.year-select option:selected').val() < year){
-		 //      	$(this).removeAttr('selected');
-		 //      	$(this).next().attr('selected','selected');
-		 //      }
-		 //      if($('.year-select option:selected').val() > year){
-		 //      	$(this).removeAttr('selected');
-		 //      	$(this).prev().attr('selected','selected');
-		 //      }
-	  //   });
+		$(".year-select option:selected").each(function() {
+			if(year === parseInt($(this).val())){
+			}
+			else{
+		    	$(".year-select option").each(function() {
+		    	if(parseInt($(this).val()) === year){
+		    		$(this).attr('selected','selected');
+		    	}
+		    	else{
+		    		$(this).removeAttr('selected');
+		    	}
+		    });
+		    //buttonMapping(month,year);
+			}
+		});
 	};
 
 	var selectDate = function(month,year){
@@ -65,18 +69,19 @@
 		$('.selector').append($monthSelect);
 
 		var selectYear = function(){
-			$(".year-select").change(function() {
+			$(".year-select").unbind().change(function() {
 			    var str = "";
 			    $( ".year-select option:selected" ).each(function() {
 			      year = parseInt($(this).val());
 			      createCalendarDatas(month,year);
 			    });
-			    buttonMapping(month,year);
-			}).trigger( "change" );	
+			      buttonMapping(month,year);
+			    console.log('sent to button mapping year: ' +year)
+			});	
 		};
 
 		var selectMonth = function(){
-			$(".month-select").change(function() {
+			$(".month-select").unbind().change(function() {
 			    var str = "";
 			    $(".month-select option:selected").each(function() {
 			      var monthName = $(this).val();
@@ -88,7 +93,7 @@
 			      createCalendarDatas(month,year);
 			    });
 			    buttonMapping(month,year);
-			}).trigger( "change" );
+			});
 		};	
 		selectYear();
 		selectMonth();
@@ -120,6 +125,10 @@
 			$('.calendar-table').append($dayHeader);
 		}
 	};
+
+	[
+
+	]
 	
 
 	var events = function(nowMonth,nowYear){
@@ -166,9 +175,10 @@
 				createCalendarDatas(todayMonth,todayYear);
 			month = todayMonth;
 			year = todayYear;
+			changeSelectBoxYear(year);
 		});
 
-		$('.prev-month').click(function(){
+		$('.prev-month').unbind().click(function(){
 			if(month > 0){
 				var prevMonth = month - 1;
 				createCalendarDatas(prevMonth,year);
@@ -180,11 +190,12 @@
 					createCalendarDatas(prevMonth,prevYear);
 				month = prevMonth;
 				year = prevYear;
+				console.log('prev-button-given-year: ' + year);
 				changeSelectBoxYear(year);
 			}
 		});
 
-		$('.next-month').click(function(){
+		$('.next-month').unbind().click(function(){
 			if(month < 11){
 				var nextMonth = month + 1;
 				createCalendarDatas(nextMonth,year);
@@ -193,7 +204,6 @@
 			else{
 				var nextMonth = 0,
 					nextYear = year + 1;
-					console.log('Next Year: ' + nextYear);
 				createCalendarDatas(nextMonth,nextYear);
 				month = nextMonth;
 				year = nextYear;
@@ -232,8 +242,6 @@
 
 		// get first day of month
 		this.getStartDay = function(){
-			console.log('year: ' + year);
-			console.log('month: ' + month);
 			var firstDay = new Date(year, month, 1),
 				startingDay = firstDay.getDay();
 			console.log('firstDay: ' + firstDay);
@@ -258,6 +266,10 @@
 				// this loop is for weekdays (cells)
 				var $dayRow= $('<tr></tr>').attr('class','day-row'); 
 			    for (var j = 0; j < cal_days_labels.length; j++) { 
+			    	// var event = checkEvent(date);
+			    	// if (event) ?{
+			    	// 	//
+			    	// }
 				    var $calendarDay = $("<td></td>").attr('class','calendar-day');
 				    if (day <= monthLength && (i > 0 || j >= startingDay)) {
 				      $calendarDay.append(day);
@@ -302,7 +314,6 @@
 			var clickDate = function(){
 				var tdList = $('.calendar-table tr td');
 				$(tdList).click(function(){
-					console.log($(this));
 				});	
 			};
 
