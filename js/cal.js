@@ -38,7 +38,7 @@
 	  //   });
 	};
 
-	var selectYear = function(month,year){
+	var selectDate = function(month,year){
 		var year = year,
 		    month = month,
 			earliestYear = 2009,
@@ -64,31 +64,35 @@
 		}
 		$('.selector').append($monthSelect);
 
-		$(".year-select").change(function() {
-		    var str = "";
-		    $( ".year-select option:selected" ).each(function() {
-		      year = parseInt($(this).val());
-		      createCalendarDatas(month,year);
-		    });
-		    buttonMapping(month,year);
-		})
+		var selectYear = function(){
+			$(".year-select").change(function() {
+			    var str = "";
+			    $( ".year-select option:selected" ).each(function() {
+			      year = parseInt($(this).val());
+			      createCalendarDatas(month,year);
+			    });
+			    buttonMapping(month,year);
+			}).trigger( "change" );	
+		};
 
-		$(".month-select").change(function() {
-		    var str = "";
-		    $( ".month-select option:selected" ).each(function() {
-		      var monthName = $(this).val();
-		      console.log($(this).val());
-		      for(var i=0; i < cal_months_labels.length; i++){
-		      	if(cal_months_labels[i] === monthName){
-		      		month = i;
-		      	}
-		      }
-		      createCalendarDatas(month,year);
-		    });
-		    buttonMapping(month,year);
-		})
-	 	.trigger( "change" );
-	}
+		var selectMonth = function(){
+			$(".month-select").change(function() {
+			    var str = "";
+			    $(".month-select option:selected").each(function() {
+			      var monthName = $(this).val();
+			      for(var i=0; i < cal_months_labels.length; i++){
+			      	if(cal_months_labels[i] === monthName){
+			      		month = i;
+			      	}
+			      }
+			      createCalendarDatas(month,year);
+			    });
+			    buttonMapping(month,year);
+			}).trigger( "change" );
+		};	
+		selectYear();
+		selectMonth();
+	}			
 
 	/**
 	  * @param [Number] month for the calendar
@@ -257,7 +261,6 @@
 				    var $calendarDay = $("<td></td>").attr('class','calendar-day');
 				    if (day <= monthLength && (i > 0 || j >= startingDay)) {
 				      $calendarDay.append(day);
-				      console.log('year sdfs '+year)
 				      if(year === calDate.getFullYear()){
 				    	if(day === todayDate && month === calDate.getMonth() && isLabelled === 1){
 				      		$calendarDay.addClass('today');
@@ -304,7 +307,8 @@
 			};
 
 			fullDateHeader(this.month,this.year);
-			selectYear(this.month,this.year);
+			/*Select options for both month and year*/
+			selectDate(this.month,this.year);
 			showDays();
 			createCalendarDatas(this.month,this.year);
 			buttonMapping(this.month,this.year);
