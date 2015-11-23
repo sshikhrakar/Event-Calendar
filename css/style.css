@@ -5,6 +5,7 @@ a{
 select {
   cursor:pointer;
 }
+
 .calendar-day{
   font-family: Roboto, sans-serif;
   font-size: 20px;
@@ -96,6 +97,9 @@ td:hover{
   text-align: center;
   line-height: 70px;
   /*border: 1px solid #d4d4d4;*/
+  -webkit-user-select: none; /* Chrome/Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
 }
 .prev-month{
   float: left; 
@@ -132,6 +136,9 @@ td:hover{
   overflow: hidden;
   white-space: nowrap;
   width: 100%; 
+}
+.disabled{
+  color: red;
 }
 /*FONTS*/
 .fc {

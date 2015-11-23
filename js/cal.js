@@ -10,9 +10,56 @@
 
 	// these are the days of the week for each month, in order
 		cal_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		that =this,
+		that = this,
+		events = [
+         			{
+         				heading: "Event Heading",
+						year: 2015,
+						month: 11,
+						date: 1
+         			},
+         			{
+         				heading: "Same Day Event",
+						year: 2015,
+						month: 11,
+						date: 19
+         			},
+         			{
+         				heading: "Event2",
+						year: 2015,
+						month: 11,
+						date: 28
+         			}
+            	],
 		calDate = new Date();
-	
+
+	var event = function(nowMonth,nowYear){
+		var nowMonth = nowMonth,
+			nowYear = nowYear,
+			year,
+			month,
+			heading,
+			date,
+			$eventObj,
+			tdArray = $('.calendar-table tr td');
+		for(var i=0; i < events.length; i++){
+			heading = events[i].heading;
+			year = events[i].year;
+			month = events[i].month;
+			date = events[i].date;
+			if(year === nowYear && month === nowMonth){
+				for(var j=0; j<tdArray.length; j++){
+					if(date === parseInt($(tdArray[j]).html()) && !$(tdArray[j]).hasClass('disabled')){
+						$eventObj = $('<span></span>').addClass('event').append(heading);
+						$(tdArray[j]).addClass('make-relative');
+						$(tdArray[j]).prepend($eventObj);
+					}
+				}
+			}
+		}
+			
+			
+	};
 	/**
 	  * @param 
 	  * @param 
@@ -124,33 +171,6 @@
 			$dayHeader.append($dayData);
 			$('.calendar-table').append($dayHeader);
 		}
-	};
-
-	[
-
-	]
-	
-
-	var events = function(nowMonth,nowYear){
-		var heading = "Event Heading",
-			year = 2015,
-			month = 11,
-			date = 19,
-			nowMonth = nowMonth,
-			nowYear = nowYear,
-			tdArray = $('.calendar-table tr td');
-			if(year === nowYear && month === nowMonth){
-				for(var i=0; i<tdArray.length; i++){
-					if(date === parseInt($(tdArray[i]).html())){
-						var $event = $('<span></span>').addClass('event').append(heading);
-						$(tdArray[i]).addClass('make-relative');
-						$(tdArray[i]).prepend($event);
-					}
-					else{
-						$(tdArray[i]).removeClass('make-relative');
-					}
-				}
-			}
 	};
 
 	var createCalendarDatas = function(month,year){
@@ -270,20 +290,21 @@
 			    	// if (event) ?{
 			    	// 	//
 			    	// }
-				    var $calendarDay = $("<td></td>").attr('class','calendar-day');
+			    	
+		    		var $calendarDay = $("<td></td>").attr('class','calendar-day');
 				    if (day <= monthLength && (i > 0 || j >= startingDay)) {
-				      $calendarDay.append(day);
-				      if(year === calDate.getFullYear()){
-				    	if(day === todayDate && month === calDate.getMonth() && isLabelled === 1){
-				      		$calendarDay.addClass('today');
-				      		isLabelled++;
-				     	}
-				      }
+							$calendarDay.append(day);
+						if(year === calDate.getFullYear()){
+						if(day === todayDate && month === calDate.getMonth() && isLabelled === 1){
+								$calendarDay.addClass('today');
+								isLabelled++;
+							}
+						}
 				     
-				      if(flag === true){
-			    		$calendarDay.css('color','red');
-				      }
-				      day++;
+						if(flag === true){
+							$calendarDay.addClass('disabled');
+						}
+					    day++;
 				    }
 				    else {
 				    	// day =28;
@@ -292,12 +313,13 @@
 				    	day = 1;
 				    	flag = true;
 				    }
-			    	$dayRow.append($calendarDay);
+
+			    	$dayRow.append($calendarDay); 
 				}
 			    $('.calendar-table').append($dayRow);
 			}
 			var nowMonth = month + 1;
-			events(nowMonth,year);
+			event(nowMonth,year);
 		};
 	}; 
 
