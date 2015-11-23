@@ -136,6 +136,9 @@ td:hover{
   overflow: hidden;
   white-space: nowrap;
   width: 100%; 
+  -webkit-box-shadow: 0 1px 0 #d4d4d4;
+  -moz-box-shadow: 0 1px 0 #d4d4d4;
+  box-shadow: 0 1px 0 #d4d4d4;
 }
 .disabled{
   color: red;

@@ -14,43 +14,61 @@
 		events = [
          			{
          				heading: "Event Heading",
-						year: 2015,
-						month: 11,
-						date: 1
+						startDay: "2015-11-1"
          			},
          			{
          				heading: "Event Heading",
-						year: 2015,
-						month: 11,
-						date: 19
+         				startDay: "2015-11-19"
          			},
          			{
-         				heading: "Same Day Event",
-						year: 2015,
-						month: 11,
-						date: 19
+         				heading: "Same Day Event 2",
+         				startDay: "2015-11-19"
+         			},
+         			{
+         				heading: "Same Day Event 3",
+         				startDay: "2015-11-19"
          			},
          			{
          				heading: "Event2",
-						year: 2015,
-						month: 11,
-						date: 28
+         				startDay: "2015-11-28"
+         			},
+         			{
+         				heading: "Same Event2",
+         				startDay: "2015-11-28"
          			},
          			{
          				heading: "Event",
-						year: 2015,
-						month: 12,
-						date: 6
+     					startDay: "2015-12-6"
          			},
          			{
          				heading: "Event",
-						year: 2016,
-						month: 1,
-						date: 30
+         				startDay: "2016-1-30"
          			}
             	],
 		calDate = new Date();
 
+
+// var events = [{ from: 3, to: 9 }, { from: 4, to: 4 }, { from: 9, to: 11 },{ from: 4, to: 12 }];
+
+// for( var eventIndex = 0, event; event = events[eventIndex], eventIndex < events.length; eventIndex++ ) {
+//     for( var dayIndex = event.from; dayIndex <= event.to; dayIndex++ ) {
+//         var dayElement = document.getElementById( 'day' + dayIndex ),
+//             firstDay = document.getElementsByClassName( 'event' + eventIndex ),
+//             top;
+//         if( firstDay.length ) {
+//             top = firstDay[0].style.top;
+//         } else {
+//             var eventCount = dayElement.getElementsByClassName( 'event' ).length;
+//             top = ( eventCount * 20 ) + 'px';
+//         };
+//         var html = '<div '
+//             + 'class="event event' + eventIndex + '" '
+//             + 'style="top: ' + top + ';">' 
+//             + eventIndex
+//             + '</div>';
+//         dayElement.insertAdjacentHTML( 'beforeEnd', html );
+//     };        
+// };
 	var event = function(nowMonth,nowYear){
 		var nowMonth = nowMonth,
 			nowYear = nowYear,
@@ -58,28 +76,44 @@
 			month,
 			heading,
 			date,
+			startDate,
 			$eventObj,
 			tdArray = $('.calendar-table tr td');
+
+
 		for(var i=0; i < events.length; i++){
 			heading = events[i].heading;
-			year = events[i].year;
-			month = events[i].month;
-			date = events[i].date;
+			startDate = events[i].startDay;
+			var splitDate = startDate.split("-"),
+			year = parseInt(splitDate[0]);
+			month = parseInt(splitDate[1]);
+			date = parseInt(splitDate[2]);
 			if(year === nowYear && month === nowMonth){
 				for(var j=0; j<tdArray.length; j++){
-					var innerTdValue = parseInt($					//get integer value
-													(tdArray[j])	//current table data element
+
+					//innerTdValue gives numeric value inside the tds ignoring all other elements
+					var innerTdValue = parseInt(					//get integer value
+													$(tdArray[j])	//current table data element
 												  	.clone()		//clone the table data so it doesnt get removed
 												  	.children()		//get all the children of the table data
 												  	.remove()		//remove all the children
 												  	.end()			//again go back to selected element
 												  	.text()			//get the text for conversion into integer
 												);
-					if(date === abc && !$(tdArray[j]).hasClass('disabled')){
-						$eventObj = $('<span></span>').addClass('event').append(heading);
-						console.log('here')
-						$(tdArray[j]).addClass('make-relative');
-						$(tdArray[j]).prepend($eventObj);
+					if(date === innerTdValue && !$(tdArray[j]).hasClass('disabled')){
+						if($(tdArray[j]).has('span').length > 0){
+							$eventObj = $('<span></span>').addClass('event').append(heading);
+							$(tdArray[j]).addClass('make-relative');
+							$(tdArray[j]).prepend($eventObj);
+							$eventObj.css('top', (i *10) + 'px');
+							break;
+						}
+						else{
+							$eventObj = $('<span></span>').addClass('event').append(heading);
+							$(tdArray[j]).addClass('make-relative');
+							$(tdArray[j]).prepend($eventObj);
+							break;
+						}
 					}
 				}
 			}
