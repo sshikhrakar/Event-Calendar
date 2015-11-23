@@ -19,6 +19,12 @@
 						date: 1
          			},
          			{
+         				heading: "Event Heading",
+						year: 2015,
+						month: 11,
+						date: 19
+         			},
+         			{
          				heading: "Same Day Event",
 						year: 2015,
 						month: 11,
@@ -29,6 +35,18 @@
 						year: 2015,
 						month: 11,
 						date: 28
+         			},
+         			{
+         				heading: "Event",
+						year: 2015,
+						month: 12,
+						date: 6
+         			},
+         			{
+         				heading: "Event",
+						year: 2016,
+						month: 1,
+						date: 30
          			}
             	],
 		calDate = new Date();
@@ -49,8 +67,17 @@
 			date = events[i].date;
 			if(year === nowYear && month === nowMonth){
 				for(var j=0; j<tdArray.length; j++){
-					if(date === parseInt($(tdArray[j]).html()) && !$(tdArray[j]).hasClass('disabled')){
+					var innerTdValue = parseInt($					//get integer value
+													(tdArray[j])	//current table data element
+												  	.clone()		//clone the table data so it doesnt get removed
+												  	.children()		//get all the children of the table data
+												  	.remove()		//remove all the children
+												  	.end()			//again go back to selected element
+												  	.text()			//get the text for conversion into integer
+												);
+					if(date === abc && !$(tdArray[j]).hasClass('disabled')){
 						$eventObj = $('<span></span>').addClass('event').append(heading);
+						console.log('here')
 						$(tdArray[j]).addClass('make-relative');
 						$(tdArray[j]).prepend($eventObj);
 					}
