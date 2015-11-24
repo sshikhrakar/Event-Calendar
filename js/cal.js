@@ -14,36 +14,37 @@
 		events = [
          			{
          				heading: "Event Heading",
-						startDay: "2015-11-1"
-         			},
-         			{
-         				heading: "Event Heading",
-         				startDay: "2015-11-19"
-         			},
-         			{
-         				heading: "Same Day Event 2",
-         				startDay: "2015-11-19"
-         			},
-         			{
-         				heading: "Same Day Event 3",
-         				startDay: "2015-11-19"
-         			},
-         			{
-         				heading: "Event2",
-         				startDay: "2015-11-28"
-         			},
-         			{
-         				heading: "Same Event2",
-         				startDay: "2015-11-28"
-         			},
-         			{
-         				heading: "Event",
-     					startDay: "2015-12-6"
-         			},
-         			{
-         				heading: "Event",
-         				startDay: "2016-1-30"
-         			}
+						startDay: "2015-11-19",
+						endDay: "2015-11-20"
+         	}//,
+         	// 		{
+         	// 			heading: "Event Heading",
+         	// 			startDay: "2015-11-19"
+         	// 		},
+         	// 		{
+         	// 			heading: "Same Day Event 2",
+         	// 			startDay: "2015-11-19"
+         	// 		},
+         	// 		{
+         	// 			heading: "Same Day Event 3",
+         	// 			startDay: "2015-11-19"
+         	// 		},
+         	// 		{
+         	// 			heading: "Event2",
+         	// 			startDay: "2015-11-28"
+         	// 		},
+         	// 		{
+         	// 			heading: "Same Event2",
+         	// 			startDay: "2015-11-28"
+         	// 		},
+         	// 		{
+         	// 			heading: "Event",
+     					// startDay: "2015-12-6"
+         	// 		},
+         	// 		{
+         	// 			heading: "Event",
+         	// 			startDay: "2016-1-30"
+         	// 		}
             	],
 		calDate = new Date();
 
@@ -51,7 +52,7 @@
 // var events = [{ from: 3, to: 9 }, { from: 4, to: 4 }, { from: 9, to: 11 },{ from: 4, to: 12 }];
 
 // for( var eventIndex = 0, event; event = events[eventIndex], eventIndex < events.length; eventIndex++ ) {
-//     for( var dayIndex = event.from; dayIndex <= event.to; dayIndex++ ) {
+//     for(var dayIndex = event.from; dayIndex <= event.to; dayIndex++) {
 //         var dayElement = document.getElementById( 'day' + dayIndex ),
 //             firstDay = document.getElementsByClassName( 'event' + eventIndex ),
 //             top;
@@ -69,36 +70,56 @@
 //         dayElement.insertAdjacentHTML( 'beforeEnd', html );
 //     };        
 // };
+
+	/**
+		* Splits the date entered in the hash map seperated by a '-'
+	  	* @param full date seperated by '-'
+	  	* return [Number] splited year, month and date objects
+	**/
+	var splitDate = function(fullDate){
+		var fullDate = fullDate,
+			splitDate = fullDate.split("-"),
+			year = parseInt(splitDate[0]),
+			month = parseInt(splitDate[1]),
+			date = parseInt(splitDate[2]);
+			return {
+				year : year,
+				month : month,
+				date : date
+			}
+	};
+
 	var event = function(nowMonth,nowYear){
 		var nowMonth = nowMonth,
 			nowYear = nowYear,
-			year,
-			month,
-			heading,
-			date,
-			startDate,
+			year, month, heading, date,
 			$eventObj,
 			tdArray = $('.calendar-table tr td');
 
-
 		for(var i=0; i < events.length; i++){
 			heading = events[i].heading;
-			startDate = events[i].startDay;
-			var splitDate = startDate.split("-"),
-			year = parseInt(splitDate[0]);
-			month = parseInt(splitDate[1]);
-			date = parseInt(splitDate[2]);
+			var startDate = events[i].startDay,
+				splitStartDate = new splitDate(startDate),
+				startYear = splitStartDate.year,
+				startMonth = splitStartDate.month,
+				startDate = splitStartDate.date;
+
+			var endDate =events[i].endDay,
+				splitEndDate = new splitDate(endDate),
+				endYear = splitEndDate.year,
+				endMonth = splitEndDate.month,
+				endDate = splitEndDate.date;
 			if(year === nowYear && month === nowMonth){
 				for(var j=0; j<tdArray.length; j++){
 
 					//innerTdValue gives numeric value inside the tds ignoring all other elements
-					var innerTdValue = parseInt(					//get integer value
-													$(tdArray[j])	//current table data element
-												  	.clone()		//clone the table data so it doesnt get removed
-												  	.children()		//get all the children of the table data
-												  	.remove()		//remove all the children
-												  	.end()			//again go back to selected element
-												  	.text()			//get the text for conversion into integer
+					var innerTdValue = parseInt(				//get integer value
+												$(tdArray[j])	//current table data element
+											  	.clone()		//clone the table data so it doesnt get removed
+											  	.children()		//get all the children of the table data
+											  	.remove()		//remove all the children
+											  	.end()			//again go back to selected element
+											  	.text()			//get the text for conversion into integer
 												);
 					if(date === innerTdValue && !$(tdArray[j]).hasClass('disabled')){
 						if($(tdArray[j]).has('span').length > 0){
@@ -184,7 +205,6 @@
 			      createCalendarDatas(month,year);
 			    });
 			      buttonMapping(month,year);
-			    console.log('sent to button mapping year: ' +year)
 			});	
 		};
 
