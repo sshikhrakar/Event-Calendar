@@ -13,63 +13,81 @@
 		that = this,
 		events = [
          			{
-         				heading: "Event Heading",
+         				heading: "Event1",
 						startDay: "2015-11-19",
-						endDay: "2015-11-20"
-         	}//,
-         	// 		{
-         	// 			heading: "Event Heading",
-         	// 			startDay: "2015-11-19"
-         	// 		},
-         	// 		{
-         	// 			heading: "Same Day Event 2",
-         	// 			startDay: "2015-11-19"
-         	// 		},
-         	// 		{
-         	// 			heading: "Same Day Event 3",
-         	// 			startDay: "2015-11-19"
-         	// 		},
-         	// 		{
-         	// 			heading: "Event2",
-         	// 			startDay: "2015-11-28"
-         	// 		},
-         	// 		{
-         	// 			heading: "Same Event2",
-         	// 			startDay: "2015-11-28"
-         	// 		},
-         	// 		{
-         	// 			heading: "Event",
-     					// startDay: "2015-12-6"
-         	// 		},
-         	// 		{
-         	// 			heading: "Event",
-         	// 			startDay: "2016-1-30"
-         	// 		}
+						endDay: "2015-11-20",
+						label: 1
+         			},
+         			{
+         				heading: "Event2",
+         				startDay: "2015-11-19",
+         				endDay: "2015-11-25",
+         				label: 2
+         			},
+         			{
+         				heading: "Event3",
+         				startDay: "2015-11-25",
+         				endDay: "2015-11-28",
+         				label: 2
+         			},
+         			{
+         				heading: "Event4",
+         				startDay: "2015-11-26",
+         				endDay: "2015-11-29",
+         				label: 1
+         			},
+         			{
+         				heading: "Event4",
+         				startDay: "2015-11-28",
+         				endDay: "2015-11-30",
+         				label: 3
+         			}
+         	
             	],
 		calDate = new Date();
 
+	function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
+		// b starts in a
+	    if (a_start <= b_start && b_start <= a_end) {return true;}	
+	    // b ends in a
+	    if (a_start <= b_end   && b_end   <= a_end) {return true;}
+		// a in b
+	    if (b_start <=  a_start && a_end   <=  b_end) {return true;}
+	  return false;  
+	};
 
-// var events = [{ from: 3, to: 9 }, { from: 4, to: 4 }, { from: 9, to: 11 },{ from: 4, to: 12 }];
+	function multipleDateRangeOverlaps() {
+	    if (dateRangeOverlaps(27, 30,20, 30)){
+	    	//return true;
+        	console.log('true');
+	    }
+	    for(var i=0; i<events.length; i++){
+	    	var startDate = events[i].startDay,
+				splitStartDate = new splitDate(startDate),
+				a_start = splitStartDate.date;
 
-// for( var eventIndex = 0, event; event = events[eventIndex], eventIndex < events.length; eventIndex++ ) {
-//     for(var dayIndex = event.from; dayIndex <= event.to; dayIndex++) {
-//         var dayElement = document.getElementById( 'day' + dayIndex ),
-//             firstDay = document.getElementsByClassName( 'event' + eventIndex ),
-//             top;
-//         if( firstDay.length ) {
-//             top = firstDay[0].style.top;
-//         } else {
-//             var eventCount = dayElement.getElementsByClassName( 'event' ).length;
-//             top = ( eventCount * 20 ) + 'px';
-//         };
-//         var html = '<div '
-//             + 'class="event event' + eventIndex + '" '
-//             + 'style="top: ' + top + ';">' 
-//             + eventIndex
-//             + '</div>';
-//         dayElement.insertAdjacentHTML( 'beforeEnd', html );
-//     };        
-// };
+			var endDate =events[i].endDay,
+				splitEndDate = new splitDate(endDate),
+				a_end = splitEndDate.date;
+
+			var startDate2 = $(events[i+1]).startDay,
+				splitStartDate2 = new splitDate(startDate),
+				b_start = splitStartDate2.date;
+
+			var endDate2 = $(events[i+1]).endDay,
+				splitEndDate2 = new splitDate(endDate),
+				b_end = splitEndDate2.date;
+
+	    	if(dateRangeOverlaps(a_start, a_end, b_start, b_end)){
+	    		events[i].label = 1;
+	    		$(events[i+1]).label = 2;
+	    	}
+	    	else{
+	    		events[i].label = 1;
+	    		$(events[i+1]).label = 1;
+	    	}
+	    }
+	};
 
 	/**
 		* Splits the date entered in the hash map seperated by a '-'
@@ -92,49 +110,69 @@
 	var event = function(nowMonth,nowYear){
 		var nowMonth = nowMonth,
 			nowYear = nowYear,
-			year, month, heading, date,
-			$eventObj,
+			heading,
+			$eventObj = [],
+			counter = 1,
 			tdArray = $('.calendar-table tr td');
+				
+			for(var i=0; i<tdArray.length; i++){
+				for(var eventIndex = 0; eventIndex < events.length; eventIndex++){
+					heading = events[eventIndex].heading;
+					var startDate = events[eventIndex].startDay,
+						splitStartDate = new splitDate(startDate),
+						startYear = splitStartDate.year,
+						startMonth = splitStartDate.month,
+						startDate = splitStartDate.date;
 
-		for(var i=0; i < events.length; i++){
-			heading = events[i].heading;
-			var startDate = events[i].startDay,
-				splitStartDate = new splitDate(startDate),
-				startYear = splitStartDate.year,
-				startMonth = splitStartDate.month,
-				startDate = splitStartDate.date;
-
-			var endDate =events[i].endDay,
-				splitEndDate = new splitDate(endDate),
-				endYear = splitEndDate.year,
-				endMonth = splitEndDate.month,
-				endDate = splitEndDate.date;
-			if(year === nowYear && month === nowMonth){
-				for(var j=0; j<tdArray.length; j++){
-
+					var endDate =events[eventIndex].endDay,
+						splitEndDate = new splitDate(endDate),
+						endYear = splitEndDate.year,
+						endMonth = splitEndDate.month,
+						endDate = splitEndDate.date;
+					if(startYear === nowYear && startMonth === nowMonth){
 					//innerTdValue gives numeric value inside the tds ignoring all other elements
 					var innerTdValue = parseInt(				//get integer value
-												$(tdArray[j])	//current table data element
+												$(tdArray[i])	//current table data element
 											  	.clone()		//clone the table data so it doesnt get removed
 											  	.children()		//get all the children of the table data
 											  	.remove()		//remove all the children
 											  	.end()			//again go back to selected element
 											  	.text()			//get the text for conversion into integer
 												);
-					if(date === innerTdValue && !$(tdArray[j]).hasClass('disabled')){
-						if($(tdArray[j]).has('span').length > 0){
-							$eventObj = $('<span></span>').addClass('event').append(heading);
-							$(tdArray[j]).addClass('make-relative');
-							$(tdArray[j]).prepend($eventObj);
-							$eventObj.css('top', (i *10) + 'px');
-							break;
+
+					if(startDate === innerTdValue && !$(tdArray[i]).hasClass('disabled')){
+						var flag = 1;
+						var temp = i;
+						var counterLength = 2;
+						for (var k = startDate; k <= endDate; k++){
+							//debugger;
+							if(flag === 1){
+								$eventObj[eventIndex] = $('<span></span>').addClass('event event'+ eventIndex).append(heading);
+								$eventObj[eventIndex].css('border-radius','12px 0 0 12px');
+								flag++;
+							}
+							else{
+								$eventObj[eventIndex] = $('<span></span>').addClass('event event'+ eventIndex);
+								if(k === endDate){
+									$eventObj[eventIndex].css('border-radius','0 12px 12px 0');
+								}
+							}
+							if(events[eventIndex].label === 1){
+								$eventObj[eventIndex].css('top','0px');
+								$(tdArray[i]).prepend($eventObj[eventIndex]);
+							}
+							else if(events[eventIndex].label === 2){
+								$eventObj[eventIndex].css('top','24px');
+								$(tdArray[i]).prepend($eventObj[eventIndex]);
+							}
+							else{
+								var showMoreBtn = $('<a></a>').addClass('show-more-btn fa fa-eye').attr('title','View All Events');
+								$(tdArray[i]).prepend(showMoreBtn);
+							}
+							i++;
 						}
-						else{
-							$eventObj = $('<span></span>').addClass('event').append(heading);
-							$(tdArray[j]).addClass('make-relative');
-							$(tdArray[j]).prepend($eventObj);
-							break;
-						}
+						counter++;	
+						i = temp;
 					}
 				}
 			}
@@ -372,7 +410,7 @@
 			    	// 	//
 			    	// }
 			    	
-		    		var $calendarDay = $("<td></td>").attr('class','calendar-day');
+		    		var $calendarDay = $("<td></td>").attr('class','calendar-day').attr('data-slot','unoccupied');
 				    if (day <= monthLength && (i > 0 || j >= startingDay)) {
 							$calendarDay.append(day);
 						if(year === calDate.getFullYear()){
@@ -426,8 +464,15 @@
 			showDays();
 			createCalendarDatas(this.month,this.year);
 			buttonMapping(this.month,this.year);
-			clickDate();  		
+			clickDate();
+			//multipleDateRangeOverlaps();  
+
+			// $('.event').each(function(i){
+			// 	$(this).click(function(){
+			// 		console.log($('.event1').html());
+			// 	})
+			// });	
 		};
 	};
 
-})(jQuery);
+}(jQuery));
